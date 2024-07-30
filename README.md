@@ -47,8 +47,8 @@ emped init $MONIKER --chain-id $EMPE_CHAIN_ID
 
 **Add Genesis File and Addrbook**
 ```
-wget -O $HOME/.empe-chain/config/genesis.json https://testnet-files.syanodes.my.id/empe-genesis.json
-wget -O $HOME/.empe-chain/config/addrbook.json https://testnet-files.syanodes.my.id/empe-addrbook.json
+wget -O $HOME/.empe-chain/config/genesis.json https://raw.githubusercontent.com/AXgit99/Empe/main/genesis.json
+wget -O $HOME/.empe-chain/config/addrbook.json https://raw.githubusercontent.com/AXgit99/Empe/main/addrbook.json
 ```
 
 **Configure Seeds and Peers**
@@ -73,7 +73,8 @@ sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.empe-chain/config/app.toml
 ```
 
-# Set Custom Port
+**Set Custom Port**
+```
 sed -i.bak -e "s%:1317%:${EMPE_PORT}317%g;
 s%:8080%:${EMPE_PORT}080%g;
 s%:9090%:${EMPE_PORT}090%g;
@@ -87,9 +88,10 @@ s%:6060%:${EMPE_PORT}060%g;
 s%:26656%:${EMPE_PORT}656%g;
 s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${EMPE_PORT}656\"%;
 s%:26660%:${EMPE_PORT}660%g" $HOME/.empe-chain/config/config.toml
+```
 
-
-# Set Service File
+**Set Service File**
+```
 sudo tee /etc/systemd/system/emped.service > /dev/null <<EOF
 [Unit]
 Description=empe-testnet
@@ -105,9 +107,11 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+```
 
-
-# Enable and Start Service
+**Enable and Start Service**
+```
 sudo systemctl daemon-reload
 sudo systemctl enable emped
 sudo systemctl start emped && sudo journalctl -fu emped -o cat
+```
